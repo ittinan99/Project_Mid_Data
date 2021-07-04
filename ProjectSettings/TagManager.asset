@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Titan_Tag
   - Weapon_Tag
+  - Skill_Tag
   layers:
   - Default
   - TransparentFX

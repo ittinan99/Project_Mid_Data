@@ -115,7 +115,7 @@ public class Level_Controller : MonoBehaviour
     }
     public void HowLevelUp()
     {
-        expCap = Mathf.Pow(5,level);
+        expCap = Mathf.Pow(4,level);
         Debug.Log(expCap);
         if(exp >= expCap)
         {
@@ -125,7 +125,7 @@ public class Level_Controller : MonoBehaviour
                 if (exp >= expCap)
                 {
                     Debug.Log(level);
-                    expCap = Mathf.Pow(5, level);
+                    expCap = Mathf.Pow(4, level);
                     level++;
                     levelPoint++;
           

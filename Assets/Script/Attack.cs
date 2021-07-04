@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using System.IO;
 
 public class Attack : MonoBehaviour
@@ -17,6 +18,7 @@ public class Attack : MonoBehaviour
     float finaldamage;
     float damage = 1;
     bool crit = false;
+    bool skillDamage = false;
 
     public Dictionary<string, Weapon_GetData> _weapon_Dic = new Dictionary<string, Weapon_GetData>();
 
@@ -27,7 +29,6 @@ public class Attack : MonoBehaviour
         _weapon = GameObject.Find("Weapon_Controller").GetComponent<Weapon>();
         _spawn = GameObject.Find("Spawn").GetComponent<Spawn>();
     }
-
     public void ReadData()
     {
         StreamReader input = null;
@@ -71,6 +72,19 @@ public class Attack : MonoBehaviour
         SetCritDamage();
         SetAllDamage();
         DamageCalculate(Weapon.tapDamage, Weapon.criticalDamage, Weapon.allDamage, Weapon.skillDamage);
+
+        Event_Controller.current.onEvent_UseSkillDamage += UseSkill;
+        Event_Controller.current.onEvent_LeftSkillDamage += LeftSkill;
+    }
+
+    void LeftSkill()
+    {
+        skillDamage = false;
+    }
+
+    void UseSkill()
+    {
+        skillDamage = true;
     }
 
     public void GetHealthFill_Value(float Get_Value)
@@ -100,6 +114,7 @@ public class Attack : MonoBehaviour
 
         crit = CheckCrit(Weapon.criticalChange);
         DamageCalculate(Weapon.tapDamage, Weapon.criticalDamage, Weapon.allDamage, Weapon.skillDamage);
+
         Debug.Log("Damage = " + damage);
         health_Value = health_Value - damage;
         SetValue_ToFill();
@@ -112,6 +127,10 @@ public class Attack : MonoBehaviour
         {
             damage = damage * critMultiply * critdamage;
             crit = false;
+        }
+        if(skillDamage == true)
+        {
+            damage = damage * skillMultiply;
         }
         return damage;
     }

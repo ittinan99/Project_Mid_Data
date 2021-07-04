@@ -12,7 +12,6 @@ public class Titan_Controller : MonoBehaviour
     public Spawn _spawn;
 
     public bool funtion_NextStageCall = true;
-    
     IEnumerator Wait_CallNextStage()
     {
         yield return new WaitForSeconds(0.75f);
@@ -28,7 +27,6 @@ public class Titan_Controller : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         _spawn.TitanDie();
     }
-
     private void Update()
     {
         if(Attack.health_Value <= 0 && funtion_NextStageCall == true)

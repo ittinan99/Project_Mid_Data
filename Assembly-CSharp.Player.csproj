@@ -644,12 +644,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Script\Attack.cs" />
+    <Compile Include="Assets\Script\CoolDown.cs" />
+    <Compile Include="Assets\Script\CountDown.cs" />
+    <Compile Include="Assets\Script\Dydamic Array\IntDynamicArray.cs" />
+    <Compile Include="Assets\Script\Dydamic Array\OrderedInt.cs" />
+    <Compile Include="Assets\Script\Dydamic Array\TestOrderInt.cs" />
+    <Compile Include="Assets\Script\Dydamic Array\TestOrderedInt.cs" />
+    <Compile Include="Assets\Script\Dydamic Array\UnOrderInt.cs" />
+    <Compile Include="Assets\Script\Event_Controller.cs" />
     <Compile Include="Assets\Script\Inventory.cs" />
     <Compile Include="Assets\Script\Level_Controller.cs" />
     <Compile Include="Assets\Script\Level_GetData.cs" />
+    <Compile Include="Assets\Script\Skill.cs" />
+    <Compile Include="Assets\Script\Skill_Controller.cs" />
     <Compile Include="Assets\Script\Spawn.cs" />
     <Compile Include="Assets\Script\Stage_Controller.cs" />
     <Compile Include="Assets\Script\Titan_Controller.cs" />
+    <Compile Include="Assets\Script\UI_System.cs" />
+    <Compile Include="Assets\Script\UseSkill_Event.cs" />
     <Compile Include="Assets\Script\Weapon_Script\Weapon.cs" />
     <Compile Include="Assets\Script\Weapon_Script\Weapon_All.cs" />
     <Compile Include="Assets\Script\Weapon_Script\Weapon_Crit.cs" />

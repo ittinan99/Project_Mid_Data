@@ -17,10 +17,12 @@ public class Spawn : Level_Controller
     
     public GameObject[] titan_GameObject;
 
+    public static int titanDie_Count;
     float fullHealth;
     float count_Boss;
     float forCalculate;
-
+    bool current_TitanBoss;
+    bool skillDrop = false;
     public void Set_StartTitanHealth()
     {
         if(PlayerPrefs.GetFloat("titanHealth") == 0)
@@ -56,33 +58,66 @@ public class Spawn : Level_Controller
     }
     public void SpawnTitan()
     {
+        if ((float)_stage.GetThisStage() % 10 == 0)
+        {
+            current_TitanBoss = true;
+            if (current_TitanBoss == true)
+            {
+                Event_Controller.current.Event_Boss();
+                fullHealth = fullHealth * 100;
+                Set_StartTitanHealth(fullHealth);
+                Set_CountBoss(count_Boss);
+
+                Debug.Log(fullHealth);
+            }
+        }
         Set_StartTitanHealth();
         Set_CountBoss();
 
-        current_Titan = Instantiate(titan_GameObject[Random.Range(0, titan_GameObject.Length)],spawn.transform);        
+        current_Titan = Instantiate(titan_GameObject[Random.Range(0, titan_GameObject.Length)],spawn.transform);
 
+        //Debug.Log(Attack.health_Value);
         health_Fill.GetComponent<Slider>().maxValue = Attack.health_Value;
         health_Fill.GetComponent<Slider>().value = health_Fill.GetComponent<Slider>().maxValue;
 
         _titan.funtion_NextStageCall = true;
     }
     public void TitanDie()
-    {
+    {   
         current_Titan = GameObject.FindGameObjectWithTag("Titan_Tag");
         current_Titan.gameObject.SetActive(false);
         Destroy(current_Titan.gameObject);
-        if((float)_stage.GetThisStage() % 2 == 0)
+
+        Event_Controller.current.Event_WinWithBoss();
+
+        if (current_TitanBoss == true)
+        {
+            Event_Controller.current.Event_Normal();
+            fullHealth = fullHealth / 100;
+            Set_StartTitanHealth(fullHealth);
+            Set_CountBoss(count_Boss);
+
+            current_TitanBoss = false;
+            Debug.Log(fullHealth);
+        }
+
+        if ((float)_stage.GetThisStage() % 2 == 0)
         {
             fullHealth = Attack.health_Value;
             forCalculate = fullHealth / (float)_stage.GetThisStage();
             fullHealth = ((float)_stage.GetThisStage() * fullHealth) / (forCalculate / count_Boss);
             count_Boss = count_Boss++;
-            //Debug.Log(fullHealth);
+
             Set_StartTitanHealth(fullHealth);
             Set_CountBoss(count_Boss);
+            
         }
-        int rand = Random.Range(0,50);
-        if (rand < Weapon.weapon_dropRate || (float)_stage.GetThisStage() % 5f == 0)
+        if(skillDrop == true)
+        {
+            Weapon.weapon_dropRate = Weapon.weapon_dropRate * Weapon.skillDamage;
+        }
+        int rand = Random.Range(0,10000);
+        if (rand < Weapon.weapon_dropRate || (float)_stage.GetThisStage() % 10f == 0)
         {
             //Debug.Log("rand : " + rand);
             //Debug.Log("DropRate : " + Weapon.weapon_dropRate);
@@ -91,6 +126,28 @@ public class Spawn : Level_Controller
                 _attack._weapon.WeaponDrop();
             }
         }
+    }
+    public void LostWithBoss()
+    {
+        TitanDie();
+        _stage.SetStageWhenLose();
+        SpawnTitan();
+    }
+    public void UseSkill()
+    {
+        skillDrop = true;
+    }
+    public void LeftSkill()
+    {
+        skillDrop = false;
+        Weapon.weapon_dropRate = 5;
+        Debug.Log(Weapon.weapon_dropRate);
+    }
+    private void Start()
+    {
+        Event_Controller.current.onEvent_LostWithBoss += LostWithBoss;
+        Event_Controller.current.onEvent_UseSkillDrop += UseSkill;
+        Event_Controller.current.onEvent_LeftSkillDrop += LeftSkill;
     }
     private void Awake()
     {

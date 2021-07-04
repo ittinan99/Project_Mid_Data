@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class Stage_Controller : MonoBehaviour
 {
@@ -32,6 +33,18 @@ public class Stage_Controller : MonoBehaviour
         stage_Text.text = start_Stage.ToString();
         SetStage_int();       
     }
+
+    public void SetStageWhenLose()
+    {
+        SetStage_int(stage_Text_int = Mathf.FloorToInt(GetThisStage() * 0.25f));
+        if (stage_Text_int == 0)
+        {
+            stage_Text_int = 1;
+        }
+        SetStage_int(stage_Text_int);
+        SetStage();
+    }
+
     private void SetStage_int()
     {
         stage_Text_int = int.Parse(stage_Text.text);
